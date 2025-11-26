@@ -1,0 +1,273 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { useStore } from "@/lib/store-context";
+
+interface Product {
+  _id: string;
+  name: string;
+  code: string;
+  status: string;
+  mode: string;
+  slug: string;
+  description: string;
+  gender: string;
+  category: {
+    _id: string;
+    name: string;
+    slug: string;
+  };
+  basePrice: {
+    currency: string;
+    value: string;
+  };
+  variants: Array<{
+    name: string;
+    code: string;
+    hex: string;
+    status: string;
+    gallery: Array<{
+      url: string;
+      _id: string;
+    }>;
+    active: boolean;
+    sizes: Array<{
+      sku: string;
+      active: boolean;
+      quantity: number;
+      status: string;
+      name: string;
+      displayName: string;
+    }>;
+  }>;
+  tags: string[];
+  business: {
+    _id: string;
+    name: string;
+    slug: string;
+  };
+  stockStatus: string;
+  quantity: number | null;
+}
+
+interface Collection {
+  _id: string;
+  name: string;
+  business: string;
+  slug: string;
+  description: string;
+  products: string[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface Category {
+  _id: string;
+  name: string;
+  slug: string;
+  gallery: string[];
+}
+
+interface ProductsResponse {
+  status: string;
+  data: {
+    results: Product[];
+    metadata: {
+      totalCount: number;
+      page: number;
+      limit: number;
+      totalPages: number;
+    };
+  };
+}
+
+interface CategoriesResponse {
+  status: string;
+  data: {
+    results: Category[];
+    count: number;
+  };
+}
+
+interface CollectionsResponse {
+  status: string;
+  data: {
+    results: Collection[];
+    count: number;
+    limit: number;
+    skip: number;
+  };
+}
+
+export function useProducts(limit?: number, gender?: string, query?: Record<string, any>) {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const { store } = useStore();
+
+  useEffect(() => {
+    async function fetchProducts() {
+      try {
+        setLoading(true);
+
+        const params: Record<string, string | number | undefined> = {
+          business: store.id,
+        };
+
+        if (limit) params.limit = limit;
+        if (gender) params.gender = gender;
+        if (query) {
+          Object.entries(query).forEach(([key, value]) => {
+            if (value !== undefined && value !== null) {
+              params[key] = value;
+            }
+          });
+        };
+        const response = await fetch(
+          `/api/stores/${store.id}/products?${new URLSearchParams(
+            params as any
+          ).toString()}`
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch products");
+        }
+
+        const data: ProductsResponse = await response.json();
+
+        if (data.status === "ok") {
+          setProducts(data.data.results || []);
+        } else {
+          throw new Error("API returned error status");
+        }
+      } catch (err) {
+        setError(
+          err instanceof Error ? err.message : "Failed to fetch products"
+        );
+        setProducts([]);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    if (store.id) {
+      fetchProducts();
+    }
+  }, [store.id, limit, gender, query]);
+
+  return { products, loading, error };
+}
+
+export function useCategories() {
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const { store } = useStore();
+
+  useEffect(() => {
+    async function fetchCategories() {
+      try {
+        setLoading(true);
+
+        const response = await fetch(`/api/stores/${store.id}/categories`);
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch categories");
+        }
+
+        const data: CategoriesResponse = await response.json();
+
+        if (data.status === "ok") {
+          setCategories(data.data.results || []);
+        } else {
+          throw new Error("API returned error status");
+        }
+      } catch (err) {
+        setError(
+          err instanceof Error ? err.message : "Failed to fetch categories"
+        );
+        setCategories([]);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    if (store.id) {
+      fetchCategories();
+    }
+  }, [store.id]);
+
+  return { categories, loading, error };
+}
+
+export function useCollections() {
+  const [collections, setCollections] = useState<Collection[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const { store } = useStore();
+
+  useEffect(() => {
+    async function fetchCollections() {
+      try {
+        setLoading(true);
+
+        const response = await fetch(`/api/stores/${store.id}/collections`);
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch collections");
+        }
+
+        const data: CollectionsResponse = await response.json();
+
+        if (data.status === "ok") {
+          setCollections(data.data.results || []);
+        } else {
+          throw new Error("API returned error status");
+        }
+      } catch (err) {
+        setError(
+          err instanceof Error ? err.message : "Failed to fetch collections"
+        );
+        setCollections([]);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    if (store.id) {
+      fetchCollections();
+    }
+  }, [store.id]);
+
+  return { collections, loading, error };
+}
+
+// Helper function to get the main product image
+export function getProductImage(product: Product): string {
+  if (product.variants && product.variants.length > 0) {
+    const firstVariant = product.variants[0];
+    if (firstVariant.gallery && firstVariant.gallery.length > 0) {
+      return firstVariant.gallery[0]?.url;
+    }
+  }
+
+  return "/placeholder-product.jpg";
+}
+
+// Helper function to get product price
+export function getProductPrice(product: Product): number {
+  return parseFloat(product.basePrice.value);
+}
+
+// Helper function to check if product is in stock
+export function isProductInStock(product: Product): boolean {
+  return product.stockStatus === "in-stock";
+}
+
+// Helper function to get category image
+export function getCategoryImage(category: Category): string {
+  if (category.gallery && category.gallery.length > 0) {
+    return category.gallery[0];
+  }
+  return "/placeholder-category.jpg";
+}

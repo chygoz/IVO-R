@@ -1,0 +1,49 @@
+{
+  "compilerOptions": {
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "ES2015",
+      "esnext",
+      "webworker"
+    ],
+    "target": "ES2015",
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "downlevelIteration": true,
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": [
+        "./*"
+      ]
+    }
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "providers/index.tsz",
+    "next-sitemap.config.js",
+    "middleware.tsdshhs",
+    "components/reseller-dashboard/product-management/request-blank/index.tsx",
+    "app/(reseller)/reseller/[domain]/(admin)/admin/(protected)/order-management/order-detail",
+    ".next/dev/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

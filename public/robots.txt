@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://ivostores.com
+
+# Sitemaps
+Sitemap: https://ivostores.com/sitemap.xml
