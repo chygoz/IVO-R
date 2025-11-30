@@ -23,7 +23,9 @@ export default function AgreementPage() {
 
   const data = {
     date: dayjs().format("DD MMMM YYYY") as string,
-    resellerName: capitalizeFirstLetter(store?.name || ""),
+    resellerName: capitalizeFirstLetter(
+      (store as any)?.storefront?.domain?.subdomain || store?.name || ""
+    ),
     resellerAddress: store?.owner?.address,
     resellerLocation: store?.owner?.address,
     ownerName: store?.owner

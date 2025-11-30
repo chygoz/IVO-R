@@ -21,6 +21,9 @@ interface ClassicLayoutProps {
 
 export function ClassicLayout({ children, theme }: ClassicLayoutProps) {
   const { colors } = theme;
+  const pathname =
+    typeof window !== "undefined" ? window.location.pathname : "";
+  const base = `/${(pathname.split("/")[1] || "").trim()}`;
 
   const navigation = [
     { label: "Home", href: "/" },
@@ -138,7 +141,7 @@ export function ClassicLayout({ children, theme }: ClassicLayoutProps) {
               <ul className="space-y-3 text-sm">
                 <li>
                   <Link
-                    href="/products"
+                    href={`${base}/products`}
                     className="text-gray-600 hover:opacity-70 transition-opacity"
                   >
                     All Products

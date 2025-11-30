@@ -6,6 +6,7 @@ import { ResellersResponse } from "./types";
 export const getResellerBySubdomain = async (
   subdomain: string
 ): Promise<ResellersResponse> => {
+  console.log('Fetching reseller data for subdomain:', subdomain);
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_SERVER_API_URL}${RESELLERS_BASE_URL}/domains/${subdomain}`,
     {
@@ -17,6 +18,7 @@ export const getResellerBySubdomain = async (
   );
 
   const data = await res.json();
+  console.log('API response for subdomain', subdomain, ':', data);
 
   if (!res.ok) {
     console.error("Error fetching reseller by subdomain:", data);

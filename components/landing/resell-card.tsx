@@ -10,7 +10,7 @@ type CardProps = {
 
 const Card = ({ index, section, subSection, image }: CardProps) => {
   return (
-    <div className="flex h-full flex-col items-center justify-center w-full text-center md:text-start py-10 space-y-2">
+    <div className=" h-full flex-col items-center justify-center w-full text-center md:text-start py-10 space-y-2">
       <div className="md:w-[353px] w-full h-[320px]  relative md:h-[320px] bg-gray-200 rounded-xl">
         <Image
           src={image}

@@ -21,6 +21,9 @@ interface MinimalLayoutProps {
 
 export function MinimalLayout({ children, theme }: MinimalLayoutProps) {
   const { colors } = theme;
+  const pathname =
+    typeof window !== "undefined" ? window.location.pathname : "";
+  const base = `/${(pathname.split("/")[1] || "").trim()}`;
 
   const navigation = [
     { label: "Shop", href: "/products" },
@@ -109,7 +112,7 @@ export function MinimalLayout({ children, theme }: MinimalLayoutProps) {
               <ul className="space-y-3 text-sm">
                 <li>
                   <Link
-                    href="/products"
+                    href={`${base}/products`}
                     className="text-gray-600 hover:opacity-70 transition-opacity"
                   >
                     All Products

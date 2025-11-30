@@ -160,7 +160,18 @@ export async function signupSeller(formData: FormData) {
 
   try {
     // Create seller account and store via API
-    await apiClient.post("/api/v1/auth/register/resellers", sellerData, {
+    // Backend expects nested structure with store object
+    const requestBody = {
+      name: sellerData.name,
+      email: sellerData.email,
+      password: sellerData.password,
+      store: {
+        name: sellerData.storeName,
+        subdomain: sellerData.subdomain,
+      },
+    };
+
+    await apiClient.post("/api/v1/auth/register/resellers", requestBody, {
       requireAuth: false,
     });
 

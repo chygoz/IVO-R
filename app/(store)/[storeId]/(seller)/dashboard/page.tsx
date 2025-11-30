@@ -1,6 +1,7 @@
 "use client";
 
 import { Suspense, useEffect, useState } from "react";
+import { useParams } from "next/navigation";
 import {
   Card,
   CardContent,
@@ -16,12 +17,9 @@ import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { useStore } from "@/contexts/reseller-store-context";
 
-export default function DashboardPage({
-  params,
-}: {
-  params: { storeId: string };
-}) {
-  const { storeId } = params;
+export default function DashboardPage() {
+  const params = useParams();
+  const storeId = params.storeId as string;
   const [isClient, setIsClient] = useState(false);
   const { store } = useStore();
 

@@ -22,6 +22,10 @@ interface LuxuryLayoutProps {
 export function LuxuryLayout({ children, theme }: LuxuryLayoutProps) {
   const { colors } = theme;
 
+  const pathname =
+    typeof window !== "undefined" ? window.location.pathname : "";
+  const base = `/${(pathname.split("/")[1] || "").trim()}`;
+
   const navigation = [
     // { label: "Collections", href: "/collections" },
     { label: "Products", href: "/products" },
@@ -146,7 +150,7 @@ export function LuxuryLayout({ children, theme }: LuxuryLayoutProps) {
               <ul className="space-y-4">
                 <li>
                   <Link
-                    href="/products"
+                    href={`${base}/products`}
                     className="text-gray-600 hover:opacity-70 transition-opacity"
                   >
                     All Pieces

@@ -21,6 +21,9 @@ interface BoldLayoutProps {
 
 export function BoldLayout({ children, theme }: BoldLayoutProps) {
   const { colors } = theme;
+  const pathname =
+    typeof window !== "undefined" ? window.location.pathname : "";
+  const base = `/${(pathname.split("/")[1] || "").trim()}`;
 
   const navigation = [{ label: "Shop", href: "/products" }];
 
@@ -157,7 +160,7 @@ export function BoldLayout({ children, theme }: BoldLayoutProps) {
               <ul className="space-y-3">
                 <li>
                   <Link
-                    href="/products"
+                    href={`${base}/products`}
                     className="opacity-80 hover:opacity-100 transition-opacity"
                   >
                     All Products

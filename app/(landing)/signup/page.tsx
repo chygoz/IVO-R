@@ -19,6 +19,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { AlertCircle } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { signupSeller } from "@/actions/auth-actions";
 
 const signupSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -63,30 +64,23 @@ export default function SignupPage() {
     setError(null);
 
     try {
-      // Call your API to create a seller account and store
-      const response = await fetch("/api/v1/auth/register/resellers", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: data.name,
-          email: data.email,
-          password: data.password,
-          store: {
-            name: data.storeName,
-            subdomain: data.subdomain,
-          },
-        }),
-      });
+      // Create FormData to match the server action signature
+      const formData = new FormData();
+      formData.append("name", data.name);
+      formData.append("email", data.email);
+      formData.append("password", data.password);
+      formData.append("storeName", data.storeName);
+      formData.append("subdomain", data.subdomain);
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to create account");
+      // Call the server action
+      const result = await signupSeller(formData);
+
+      if (!result.success) {
+        throw new Error(result.error || "Failed to create account");
       }
 
-      // If successful, redirect to the dashboard
-      router.push("/dashboard");
+      // If successful, redirect to the login page or dashboard
+      router.push("/admin/auth/signin?signup=success");
     } catch (err) {
       setError(
         err instanceof Error ? err.message : "An unexpected error occurred"

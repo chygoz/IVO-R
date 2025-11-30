@@ -11,8 +11,6 @@ const getUserShipping = async (): Promise<{
     // tags: ["my-user-shipping"],
   });
 
-  console.log("res from fetchAPI", res.data);
-
   if (!res || res.error || !res.success) {
     return { status: "failed", data: [] };
   }
@@ -23,6 +21,5 @@ const getUserShipping = async (): Promise<{
     data: res.data || [],
   };
 };
-
 
 export default getUserShipping;

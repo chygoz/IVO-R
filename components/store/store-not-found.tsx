@@ -11,6 +11,9 @@ import Image from "next/image";
 export function StoreNotFound() {
   const { store } = useStore();
   const { colors, template } = store;
+  const pathname =
+    typeof window !== "undefined" ? window.location.pathname : "";
+  const base = `/${(pathname.split("/")[1] || "").trim()}`;
   const { products } = useProducts(4); // Get some products for suggestions
 
   // Get template-specific styling
@@ -193,7 +196,7 @@ export function StoreNotFound() {
                 </span>
 
                 <Link
-                  href="/products"
+                  href={`${base}/products`}
                   className={styles.linkClass}
                   style={{ color: colors.primary }}
                 >

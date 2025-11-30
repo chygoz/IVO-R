@@ -443,6 +443,7 @@ export function AuthProvider({
       });
 
       const data = await response.json();
+      console.log('Seller login response:', data);
 
       if (!response.ok) {
         setIsLoading(false);
@@ -461,32 +462,31 @@ export function AuthProvider({
         data.user?.onboardingStatus &&
         !data.user.onboardingStatus.completed
       ) {
-        // Redirect to appropriate onboarding step on main domain
-        const mainDomain = removeDot(
-          process.env.NEXT_PUBLIC_ROOT_DOMAIN || "resellerivo.com"
-        );
-        window.location.href = `https://${mainDomain}/onboarding/${data.user.onboardingStatus.currentStep}`;
+        // Get the seller's subdomain
+        const subdomain = data.user.subdomain || data.user.businessId;
+        console.log('Redirecting to onboarding for subdomain:', subdomain);
+        
+        // Redirect to appropriate onboarding step on seller's subdomain
+        router.push(`/${subdomain}/onboarding/${data.user.onboardingStatus.currentStep}`);
         return { success: true };
       }
 
       // If redirectUrl is provided, use it
       if (redirectUrl) {
         router.push(redirectUrl);
-      } else if (loginModalReturnUrl) {
-        // Return to the page that triggered the login modal
-        router.push(loginModalReturnUrl);
-        setLoginModalReturnUrl(null);
       } else {
         // Check if we should redirect to this seller's subdomain
         const currentHostname = window.location.hostname;
+        const sellerSubdomain = data.user.subdomain || data.user.businessId;
         const mainDomain = removeDot(
           process.env.NEXT_PUBLIC_ROOT_DOMAIN || "resellerivo.com"
         );
-        const sellerSubdomain = `${data.user.subdomain}.${mainDomain}`;
+        
+        console.log('Seller redirect info:', { sellerSubdomain, currentHostname, mainDomain });
 
         // If we're not already on the seller's subdomain, redirect there
-        if (!currentHostname.startsWith(`${data.user.businessId}.`)) {
-          window.location.href = `https://${sellerSubdomain}/dashboard`;
+        if (sellerSubdomain && !currentHostname.startsWith(`${sellerSubdomain}.`)) {
+          window.location.href = `https://${sellerSubdomain}.${mainDomain}/dashboard`;
           return { success: true };
         }
 
@@ -841,6 +841,7 @@ export function AuthProvider({
       });
 
       const data = await response.json();
+      console.log('Login API response:', data);
 
       if (!response.ok || data.error) {
         setIsLoading(false);
@@ -848,6 +849,7 @@ export function AuthProvider({
       }
 
       // ✅ Update session on the server
+      console.log('Setting user data in session:', data.user);
       await updateUserSession(data.user);
 
       // ✅ Update local state immediately

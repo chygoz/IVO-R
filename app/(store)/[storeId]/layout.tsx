@@ -27,11 +27,14 @@ async function StoreDataProvider({
   let store;
   try {
     store = await getResellerBySubdomain(storeId);
+    console.log('Store data for subdomain', storeId, ':', store);
   } catch (error) {
+    console.error('Error fetching store data for subdomain', storeId, ':', error);
     notFound();
   }
 
   if (!store) {
+    console.log('No store found for subdomain:', storeId);
     notFound();
   }
 
