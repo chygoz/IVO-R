@@ -26,47 +26,48 @@ interface DashboardSidebarProps {
 
 export function DashboardSidebar({ store }: DashboardSidebarProps) {
   const pathname = usePathname();
-  const base = `/${(pathname.split("/")[1] || "").trim()}`;
+  // Extract storeId from pathname - it's always the first segment
+  const storeId = pathname.split("/")[1] || "";
 
   const navItems = [
     {
       name: "Dashboard",
-      href: `${base}/dashboard`,
+      href: `/${storeId}/dashboard`,
       icon: LayoutDashboard,
     },
     {
       name: "Products",
-      href: `${base}/dashboard/products`,
+      href: `/${storeId}/dashboard/products`,
       icon: Package,
     },
     {
       name: "Orders",
-      href: `${base}/dashboard/orders`,
+      href: `/${storeId}/dashboard/orders`,
       icon: ShoppingBag,
     },
     {
       name: "Customers",
-      href: `${base}/dashboard/customers`,
+      href: `/${storeId}/dashboard/customers`,
       icon: Users,
     },
     {
       name: "Analytics",
-      href: `${base}/dashboard/analytics`,
+      href: `/${storeId}/dashboard/analytics`,
       icon: BarChart,
     },
     {
       name: "Wallet",
-      href: `${base}/dashboard/wallet`,
+      href: `/${storeId}/dashboard/wallet`,
       icon: CreditCard,
     },
     {
       name: "Subscription",
-      href: `${base}/dashboard/subscription`,
+      href: `/${storeId}/dashboard/subscription`,
       icon: CreditCard,
     },
     {
       name: "Settings",
-      href: `${base}/dashboard/settings`,
+      href: `/${storeId}/dashboard/settings`,
       icon: Settings,
     },
   ];
@@ -75,7 +76,7 @@ export function DashboardSidebar({ store }: DashboardSidebarProps) {
     <div className="w-64 h-screen bg-white border-r flex-shrink-0 hidden md:block">
       <div className="flex flex-col h-full">
         <div className="p-6 border-b">
-          <Link href={`${base}/dashboard`} className="flex items-center">
+          <Link href={`/${storeId}/dashboard`} className="flex items-center">
             {store.logo ? (
               <Image
                 width={400}
@@ -138,7 +139,7 @@ export function DashboardSidebar({ store }: DashboardSidebarProps) {
         <div className="p-4 border-t">
           <div className="mt-6 px-3">
             <Link
-              href={base}
+              href={`/${storeId}`}
               className="text-sm text-primary hover:underline flex items-center"
             >
               View Your Store
