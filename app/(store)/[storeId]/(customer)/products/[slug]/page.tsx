@@ -73,6 +73,10 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
   const { colors } = store;
   const { addItem, isLoading: cartLoading } = useCart();
   const { products: relatedProducts } = useProducts(4);
+  
+  // Extract storeId for navigation
+  const pathname = typeof window !== "undefined" ? window.location.pathname : "";
+  const storeId = pathname.split("/")[1] || params.storeId || "";
 
   const [product, setProduct] = useState<ProductDetail | null>(null);
   const [loading, setLoading] = useState(true);
@@ -173,7 +177,7 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
             Product not found
           </h1>
           <Link
-            href="/products"
+            href={`/${storeId}/products`}
             className="px-6 py-3 rounded-lg font-medium"
             style={{
               backgroundColor: colors.primary,
@@ -197,7 +201,7 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
         <nav className="mb-8">
           <div className="flex items-center space-x-2 text-sm">
             <Link
-              href="/"
+              href={`/${storeId}`}
               className="hover:opacity-70"
               style={{ color: colors.text }}
             >
@@ -205,7 +209,7 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
             </Link>
             <span>/</span>
             <Link
-              href="/products"
+              href={`/${storeId}/products`}
               className="hover:opacity-70"
               style={{ color: colors.text }}
             >
@@ -541,7 +545,7 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
                       className="group"
                     >
                       <Link
-                        href={`/products/${relatedProduct.slug}`}
+                        href={`/${storeId}/products/${relatedProduct.slug}`}
                         className="block"
                       >
                         <div className="aspect-square relative overflow-hidden mb-3">

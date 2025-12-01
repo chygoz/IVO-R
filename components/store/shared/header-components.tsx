@@ -222,6 +222,9 @@ export function UserMenu({ theme, className }: UserMenuProps) {
   const { user, isAuthenticated, isSeller, logout } = useAuth();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  
+  const pathname = typeof window !== "undefined" ? window.location.pathname : "";
+  const base = `/${(pathname.split("/")[1] || "").trim()}`;
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -240,7 +243,7 @@ export function UserMenu({ theme, className }: UserMenuProps) {
   if (!isAuthenticated) {
     return (
       <Link
-        href="/login"
+        href={`${base}/login`}
         className={className || getUserButtonClass(theme)}
         style={{ color: getIconColor(theme) }}
       >
@@ -278,7 +281,7 @@ export function UserMenu({ theme, className }: UserMenuProps) {
               {!isSeller && (
                 <>
                   <Link
-                    href="/account"
+                    href={`${base}/account`}
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
                     onClick={() => setIsDropdownOpen(false)}
                   >
@@ -286,7 +289,7 @@ export function UserMenu({ theme, className }: UserMenuProps) {
                   </Link>
 
                   <Link
-                    href="/orders"
+                    href={`${base}/orders`}
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
                     onClick={() => setIsDropdownOpen(false)}
                   >
@@ -297,7 +300,7 @@ export function UserMenu({ theme, className }: UserMenuProps) {
 
               {isSeller && (
                 <Link
-                  href="/dashboard"
+                  href={`${base}/dashboard`}
                   className="block px-4 py-2 text-sm font-medium hover:bg-gray-50 transition-colors"
                   style={{ color: theme.colors.primary }}
                   onClick={() => setIsDropdownOpen(false)}
@@ -831,7 +834,7 @@ export function MobileMenu({ theme, navigation }: MobileMenuProps) {
               ) : (
                 <div className="mb-8">
                   <Link
-                    href="/login"
+                    href={`${base}/login`}
                     className="block w-full py-3 px-4 rounded-lg text-center font-medium transition-all duration-300 hover:opacity-90"
                     style={{
                       backgroundColor: theme.colors.primary,
@@ -881,7 +884,7 @@ export function MobileMenu({ theme, navigation }: MobileMenuProps) {
                   style={{ borderColor: `${theme.colors.text}20` }}
                 >
                   <Link
-                    href="/account"
+                    href={`${base}/account`}
                     className="block py-2 px-4 text-sm rounded-lg transition-colors hover:bg-opacity-10"
                     style={{ color: theme.colors.text }}
                     onMouseEnter={(e) => {
@@ -895,7 +898,7 @@ export function MobileMenu({ theme, navigation }: MobileMenuProps) {
                     My Account
                   </Link>
                   <Link
-                    href="/orders"
+                    href={`${base}/orders`}
                     className="block py-2 px-4 text-sm rounded-lg transition-colors hover:bg-opacity-10"
                     style={{ color: theme.colors.text }}
                     onMouseEnter={(e) => {
