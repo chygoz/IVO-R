@@ -108,8 +108,10 @@ export default function CreateProductPage() {
         if (isMounted) {
           setProduct(newDraft || null);
           setIsLoading(false);
-          // Update URL to reflect the new draft ID
-          router.replace(`${base}/dashboard/products/create?draftId=${newDraftId}`);
+          // Delay URL update to avoid blocking initial render
+          setTimeout(() => {
+            router.replace(`${base}/dashboard/products/create?draftId=${newDraftId}`);
+          }, 100);
         }
         return;
       }
