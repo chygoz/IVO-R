@@ -91,8 +91,9 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
     async function fetchProduct() {
       try {
         setLoading(true);
+        // Use storeId from context (works for both subdomain and path-based routing)
         const response = await fetch(
-          `/api/stores/${params.storeId}/products/${params.slug}`
+          `/api/stores/${storeId}/products/${params.slug}`
         );
 
         if (!response.ok) {
