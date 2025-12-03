@@ -16,11 +16,12 @@ interface ProductGridProps {
 }
 
 export function ProductGrid({ products }: ProductGridProps) {
-  const { store } = useStore();
+  const { store, storeId } = useStore();
   const { addItem } = useCart();
   const { toast } = useToast();
-  const pathname = typeof window !== "undefined" ? window.location.pathname : "";
-  const base = `/${(pathname.split("/")[1] || "").trim()}`;
+  const pathname = usePathname();
+  const isPathBased = pathname?.startsWith(`/${storeId}`);
+  const base = isPathBased ? `/${storeId}` : "";
 
   const handleAddToCart = (product: Product) => {
     addItem({

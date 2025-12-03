@@ -30,6 +30,7 @@ export function transformResellerToTheme(
     subtext: reseller.storefront.theme.subtext,
     banner: reseller.storefront.theme.bannerImage,
     domain: reseller.storefront.domain.subdomain,
+    storeId: reseller.subdomain || reseller.storefront.domain.subdomain || reseller.slug,
     settings: {
       currency: reseller.storefront.settings.currency,
       showPrices: reseller.storefront.settings.showPrices,

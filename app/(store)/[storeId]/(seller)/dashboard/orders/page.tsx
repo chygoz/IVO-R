@@ -10,7 +10,7 @@ import {
   ChevronRightIcon,
   MoreVertical,
 } from "lucide-react";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter, usePathname, useParams } from "next/navigation";
 import Image from "next/image";
 import OrderStatusBadge from "@/components/ui/order-status-badge";
 import PageWrapper from "@/components/ui/page-wrapper";
@@ -27,7 +27,10 @@ const statusOptions = [
 export default function OrderManagement() {
   const router = useRouter();
   const pathname = usePathname();
-  const base = `/${(pathname.split("/")[1] || "").trim()}`;
+  const params = useParams() as { storeId?: string };
+  const storeId = params.storeId;
+  const isPathBased = pathname?.startsWith(`/${storeId}`);
+  const base = isPathBased ? `/${storeId}` : "";
   const [loading, setLoading] = useState(true);
   const [orders, setOrders] = useState<OrderType[]>([]);
   const [totalPages, setTotalPages] = useState(1);

@@ -2,14 +2,16 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useCart } from "@/providers/cart-provider";
 import { useStore } from "@/lib/store-context";
 import Image from "next/image";
 
 export function CartSidebar() {
-  const { store } = useStore();
-  const pathname = typeof window !== "undefined" ? window.location.pathname : "";
-  const base = `/${(pathname.split("/")[1] || "").trim()}`;
+  const { store, storeId } = useStore();
+  const pathname = usePathname();
+  const isPathBased = pathname?.startsWith(`/${storeId}`);
+  const base = isPathBased ? `/${storeId}` : "";
   const {
     isOpen,
     closeCart,

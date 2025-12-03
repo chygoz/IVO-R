@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useStore } from "@/lib/store-context";
 import {
   useProducts,
@@ -14,10 +15,11 @@ import {
 } from "@/hooks/use-store-data";
 
 export function ClassicTemplate() {
-  const { store } = useStore();
+  const { store, storeId } = useStore();
   const { colors, headline, subtext, banner } = store;
-  const pathname = typeof window !== "undefined" ? window.location.pathname : "";
-  const base = `/${(pathname.split("/")[1] || "").trim()}`;
+  const pathname = usePathname();
+  const isPathBased = pathname?.startsWith(`/${storeId}`);
+  const base = isPathBased ? `/${storeId}` : "";
   const { products, loading: productsLoading } = useProducts(4);
   const { categories, loading: categoriesLoading } = useCategories();
 

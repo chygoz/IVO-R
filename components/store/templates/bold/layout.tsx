@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { StoreTheme } from "@/lib/store-context";
 import {
   LogoComponent,
@@ -21,11 +22,11 @@ interface BoldLayoutProps {
 
 export function BoldLayout({ children, theme }: BoldLayoutProps) {
   const { colors } = theme;
-  const pathname =
-    typeof window !== "undefined" ? window.location.pathname : "";
-  const base = `/${(pathname.split("/")[1] || "").trim()}`;
+  const pathname = usePathname();
+  const isPathBased = pathname?.startsWith(`/${theme.storeId}`);
+  const base = isPathBased ? `/${theme.storeId}` : "";
 
-  const navigation = [{ label: "Shop", href: "/products" }];
+  const navigation = [{ label: "Shop", href: `${base}/products` }];
 
   return (
     <div

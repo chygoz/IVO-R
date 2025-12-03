@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { StoreTheme } from "@/lib/store-context";
 import {
   LogoComponent,
@@ -22,8 +23,9 @@ interface ModernLayoutProps {
 
 export function ModernLayout({ children, theme }: ModernLayoutProps) {
   const { colors } = theme;
-  const pathname = typeof window !== "undefined" ? window.location.pathname : "";
-  const base = `/${(pathname.split("/")[1] || "").trim()}`;
+  const pathname = usePathname();
+  const isPathBased = pathname?.startsWith(`/${theme.storeId}`);
+  const base = isPathBased ? `/${theme.storeId}` : "";
 
   const navigation = [
     { label: "Shop", href: `${base}/products` },

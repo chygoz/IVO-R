@@ -97,7 +97,9 @@ export default function ProductsPage() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const params = useParams() as { storeId?: string };
-  const base = `/${(params.storeId || (pathname.split("/")[1] || "")).trim()}`;
+  const storeId = params.storeId;
+  const isPathBased = pathname?.startsWith(`/${storeId}`);
+  const base = isPathBased ? `/${storeId}` : "";
   const { user } = useAuth();
   const { toast } = useToast();
   const { store } = useStore();

@@ -65,7 +65,7 @@ export default async function DashboardLayout({
   return (
     <div className="flex bg-[#F8F8F8] h-screen flex-col md:flex-row">
       {/*@ts-expect-error */}
-      <DashboardSidebar store={store} />
+      <DashboardSidebar store={store} storeId={storeId} />
 
       <div className="flex-1 flex flex-col">
         {/*@ts-expect-error */}

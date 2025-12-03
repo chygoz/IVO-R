@@ -116,7 +116,9 @@ export default function BlankDetailPage() {
   const router = useRouter();
   const params = useParams();
   const pathname = usePathname();
-  const base = `/${(pathname.split("/")[1] || "").trim()}`;
+  const storeId = params.storeId as string;
+  const isPathBased = pathname?.startsWith(`/${storeId}`);
+  const base = isPathBased ? `/${storeId}` : "";
   const blankId = params.blankId as string;
   const { toast } = useToast();
 

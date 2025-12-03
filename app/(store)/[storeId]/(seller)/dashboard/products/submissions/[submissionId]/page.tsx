@@ -53,7 +53,9 @@ export default function SubmissionDetailPage() {
   const router = useRouter();
   const params = useParams();
   const pathname = usePathname();
-  const base = `/${(pathname.split("/")[1] || "").trim()}`;
+  const storeId = params.storeId as string;
+  const isPathBased = pathname?.startsWith(`/${storeId}`);
+  const base = isPathBased ? `/${storeId}` : "";
   const submissionId = params.submissionId as string;
   const { toast } = useToast();
 

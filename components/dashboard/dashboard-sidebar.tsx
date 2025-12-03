@@ -21,53 +21,57 @@ interface DashboardSidebarProps {
     id: string;
     name: string;
     logo?: string;
+    subdomain?: string;
   };
+  storeId: string;
 }
 
-export function DashboardSidebar({ store }: DashboardSidebarProps) {
+export function DashboardSidebar({ store, storeId }: DashboardSidebarProps) {
   const pathname = usePathname();
-  // Extract storeId from pathname - it's always the first segment
-  const storeId = pathname.split("/")[1] || "";
+  // Determine if we are using path-based routing (localhost/main domain) or subdomain routing
+  // If pathname starts with /storeId, we are in path-based mode
+  const isPathBased = pathname.startsWith(`/${storeId}`);
+  const base = isPathBased ? `/${storeId}` : "";
 
   const navItems = [
     {
       name: "Dashboard",
-      href: `/${storeId}/dashboard`,
+      href: `${base}/dashboard`,
       icon: LayoutDashboard,
     },
     {
       name: "Products",
-      href: `/${storeId}/dashboard/products`,
+      href: `${base}/dashboard/products`,
       icon: Package,
     },
     {
       name: "Orders",
-      href: `/${storeId}/dashboard/orders`,
+      href: `${base}/dashboard/orders`,
       icon: ShoppingBag,
     },
     {
       name: "Customers",
-      href: `/${storeId}/dashboard/customers`,
+      href: `${base}/dashboard/customers`,
       icon: Users,
     },
     {
       name: "Analytics",
-      href: `/${storeId}/dashboard/analytics`,
+      href: `${base}/dashboard/analytics`,
       icon: BarChart,
     },
     {
       name: "Wallet",
-      href: `/${storeId}/dashboard/wallet`,
+      href: `${base}/dashboard/wallet`,
       icon: CreditCard,
     },
     {
       name: "Subscription",
-      href: `/${storeId}/dashboard/subscription`,
+      href: `${base}/dashboard/subscription`,
       icon: CreditCard,
     },
     {
       name: "Settings",
-      href: `/${storeId}/dashboard/settings`,
+      href: `${base}/dashboard/settings`,
       icon: Settings,
     },
   ];
@@ -76,7 +80,7 @@ export function DashboardSidebar({ store }: DashboardSidebarProps) {
     <div className="w-64 h-screen bg-white border-r flex-shrink-0 hidden md:block">
       <div className="flex flex-col h-full">
         <div className="p-6 border-b">
-          <Link href={`/${storeId}/dashboard`} className="flex items-center">
+          <Link href={`${base}/dashboard`} className="flex items-center">
             {store.logo ? (
               <Image
                 width={400}
@@ -139,7 +143,7 @@ export function DashboardSidebar({ store }: DashboardSidebarProps) {
         <div className="p-4 border-t">
           <div className="mt-6 px-3">
             <Link
-              href={`/${storeId}`}
+              href={base || "/"}
               className="text-sm text-primary hover:underline flex items-center"
             >
               View Your Store

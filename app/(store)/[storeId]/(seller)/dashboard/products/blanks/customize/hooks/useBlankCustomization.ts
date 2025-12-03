@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter, usePathname, useParams } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "@/contexts/auth-context";
 import { useProductStore } from "@/store/product-store";
@@ -10,8 +10,11 @@ import { blankService } from "@/lib/api/blank";
 
 export const useBlankCustomization = () => {
   const router = useRouter();
-  const pathname = typeof window !== "undefined" ? window.location.pathname : "";
-  const base = `/${(pathname.split("/")[1] || "").trim()}`;
+  const pathname = usePathname();
+  const params = useParams() as { storeId?: string };
+  const storeId = params.storeId;
+  const isPathBased = pathname?.startsWith(`/${storeId}`);
+  const base = isPathBased ? `/${storeId}` : "";
   const { toast } = useToast();
   const { user } = useAuth();
   const { selectedBlanks, unselectBlank } = useProductStore();

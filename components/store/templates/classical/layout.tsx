@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { StoreTheme } from "@/lib/store-context";
 import {
   LogoComponent,
@@ -21,15 +22,15 @@ interface ClassicLayoutProps {
 
 export function ClassicLayout({ children, theme }: ClassicLayoutProps) {
   const { colors } = theme;
-  const pathname =
-    typeof window !== "undefined" ? window.location.pathname : "";
-  const base = `/${(pathname.split("/")[1] || "").trim()}`;
+  const pathname = usePathname();
+  const isPathBased = pathname?.startsWith(`/${theme.storeId}`);
+  const base = isPathBased ? `/${theme.storeId}` : "";
 
   const navigation = [
-    { label: "Home", href: "/" },
-    // { label: "New Arrivals", href: "/collections/new" },
-    { label: "Shop All", href: "/products" },
-    // { label: "Women", href: "/collections/women" },
+    { label: "Home", href: base || "/" },
+    // { label: "New Arrivals", href: `${base}/collections/new` },
+    { label: "Shop All", href: `${base}/products` },
+    // { label: "Women", href: `${base}/collections/women` },
     // { label: "Men", href: "/collections/men" },
     // { label: "Accessories", href: "/collections/accessories" },
     // { label: "About", href: "/about" },

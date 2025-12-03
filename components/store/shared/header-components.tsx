@@ -3,6 +3,7 @@ import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useMemo } from "react";
 import { useAuth } from "@/contexts/auth-context";
 import { useState, useRef, useEffect } from "react";
@@ -27,8 +28,9 @@ interface LogoComponentProps {
 }
 
 export function LogoComponent({ theme, className }: LogoComponentProps) {
-  const pathname = typeof window !== "undefined" ? window.location.pathname : "";
-  const base = `/${(pathname.split("/")[1] || "").trim()}`;
+  const pathname = usePathname();
+  const isPathBased = pathname?.startsWith(`/${theme.storeId}`);
+  const base = isPathBased ? `/${theme.storeId}` : "";
   return (
     <Link href={base || "/"} className={`flex items-center ${className || ""}`}>
       {theme.logo ? (
@@ -61,6 +63,9 @@ export function SearchComponent({ theme, className }: SearchComponentProps) {
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const pathname = usePathname();
+  const isPathBased = pathname?.startsWith(`/${theme.storeId}`);
+  const base = isPathBased ? `/${theme.storeId}` : "";
 
   const handleSearch = async (query: string) => {
     if (!query.trim()) {
@@ -222,9 +227,9 @@ export function UserMenu({ theme, className }: UserMenuProps) {
   const { user, isAuthenticated, isSeller, logout } = useAuth();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  
-  const pathname = typeof window !== "undefined" ? window.location.pathname : "";
-  const base = `/${(pathname.split("/")[1] || "").trim()}`;
+  const pathname = usePathname();
+  const isPathBased = pathname?.startsWith(`/${theme.storeId}`);
+  const base = isPathBased ? `/${theme.storeId}` : "";
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -353,6 +358,9 @@ export function CartButton({
   const [justAdded, setJustAdded] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const prevItemCount = useRef(itemCount);
+  const pathname = usePathname();
+  const isPathBased = pathname?.startsWith(`/${theme.storeId}`);
+  const base = isPathBased ? `/${theme.storeId}` : "";
 
   useEffect(() => {
     if (itemCount > prevItemCount.current) {
@@ -669,8 +677,9 @@ interface NavigationProps {
 }
 
 export function Navigation({ theme, navigation, className }: NavigationProps) {
-  const pathname = typeof window !== "undefined" ? window.location.pathname : "";
-  const base = `/${(pathname.split("/")[1] || "").trim()}`;
+  const pathname = usePathname();
+  const isPathBased = pathname?.startsWith(`/${theme.storeId}`);
+  const base = isPathBased ? `/${theme.storeId}` : "";
   const defaultNavigation: NavigationItem[] = [
     { label: "Shop", href: `${base}/products` },
     { label: "Collections", href: `${base}/collections` },
@@ -707,8 +716,9 @@ export function MobileMenu({ theme, navigation }: MobileMenuProps) {
   const [isMounted, setIsMounted] = useState(false);
   const { user, isAuthenticated, isSeller, logout } = useAuth();
 
-  const pathname = typeof window !== "undefined" ? window.location.pathname : "";
-  const base = `/${(pathname.split("/")[1] || "").trim()}`;
+  const pathname = usePathname();
+  const isPathBased = pathname?.startsWith(`/${theme.storeId}`);
+  const base = isPathBased ? `/${theme.storeId}` : "";
   const defaultNavigation: NavigationItem[] = [
     { label: "Shop", href: `${base}/products` },
     { label: "Collections", href: `${base}/collections` },
@@ -1128,5 +1138,3 @@ function CheckIcon(props: React.SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
-  const pathname = typeof window !== "undefined" ? window.location.pathname : "";
-  const base = `/${(pathname.split("/")[1] || "").trim()}`;

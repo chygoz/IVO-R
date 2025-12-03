@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname, useParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/auth-context";
 import {
@@ -177,9 +177,11 @@ export function DashboardHeader({ store }: DashboardHeaderProps) {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [notifications, setNotifications] = useState<Notification[]>([]);
-  const pathnameBase =
-    typeof window !== "undefined" ? window.location.pathname.split("/")[1] : "";
-  const base = `/${pathnameBase}`;
+  const pathname = usePathname();
+  const params = useParams() as { storeId?: string };
+  const storeId = params.storeId;
+  const isPathBased = pathname?.startsWith(`/${storeId}`);
+  const base = isPathBased ? `/${storeId}` : "";
 
   const unreadNotifications = notifications.filter((n) => !n.read).length;
 

@@ -2,14 +2,16 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useStore } from "@/lib/store-context";
 import { useCart } from "@/providers/cart-provider";
 import Image from "next/image";
-export default function CartPage() {
-  const { store } = useStore();
+export function CartPage() {
+  const { store, storeId } = useStore();
   const { colors } = store;
-  const pathname = typeof window !== "undefined" ? window.location.pathname : "";
-  const base = `/${(pathname.split("/")[1] || "").trim()}`;
+  const pathname = usePathname();
+  const isPathBased = pathname?.startsWith(`/${storeId}`);
+  const base = isPathBased ? `/${storeId}` : "";
   const {
     items,
     totalAmount,
@@ -441,3 +443,4 @@ function TrashIcon(props: React.SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
+export default CartPage;

@@ -68,4 +68,6 @@ export interface StoreFront {
   };
 }
 
-export interface ResellersResponse extends StoreFront {}
+export interface ResellersResponse extends StoreFront {
+  subdomain?: string; // Added by getResellerBySubdomain
+}

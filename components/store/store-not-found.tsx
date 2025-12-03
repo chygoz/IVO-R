@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useStore } from "@/lib/store-context";
 import { Container } from "@/components/store/shared/container";
 import { useProducts } from "@/hooks/use-store-data";
@@ -9,11 +10,11 @@ import { getProductImage, getProductPrice } from "@/hooks/use-store-data";
 import Image from "next/image";
 
 export function StoreNotFound() {
-  const { store } = useStore();
+  const { store, storeId } = useStore();
   const { colors, template } = store;
-  const pathname =
-    typeof window !== "undefined" ? window.location.pathname : "";
-  const base = `/${(pathname.split("/")[1] || "").trim()}`;
+  const pathname = usePathname();
+  const isPathBased = pathname?.startsWith(`/${storeId}`);
+  const base = isPathBased ? `/${storeId}` : "";
   const { products } = useProducts(4); // Get some products for suggestions
 
   // Get template-specific styling
@@ -160,7 +161,7 @@ export function StoreNotFound() {
               {/* Primary CTA */}
               <div className="mb-6">
                 <Link
-                  href="/"
+                  href={base || "/"}
                   className={`inline-block ${styles.buttonClass}`}
                   style={
                     template === "minimal"
@@ -206,7 +207,7 @@ export function StoreNotFound() {
                 <span style={{ color: colors.text }}>•</span>
 
                 <Link
-                  href="/collections"
+                  href={`${base}/collections`}
                   className={styles.linkClass}
                   style={{ color: colors.primary }}
                 >
@@ -216,7 +217,7 @@ export function StoreNotFound() {
                 <span style={{ color: colors.text }}>•</span>
 
                 <Link
-                  href="/about"
+                  href={`${base}/about`}
                   className={styles.linkClass}
                   style={{ color: colors.primary }}
                 >
@@ -273,7 +274,7 @@ export function StoreNotFound() {
                   transition={{ duration: 0.6, delay: index * 0.1 }}
                   className="group"
                 >
-                  <Link href={`/products/${product.slug}`} className="block">
+                  <Link href={`${base}/products/${product.slug}`} className="block">
                     <div className="aspect-square relative overflow-hidden rounded-lg mb-3 bg-gray-100">
                       <Image
                         src={getProductImage(product)}
@@ -322,7 +323,7 @@ export function StoreNotFound() {
               className="text-center mt-12"
             >
               <Link
-                href="/products"
+                href={`${base}/products`}
                 className={`inline-block ${styles.buttonClass}`}
                 style={
                   template === "minimal"
@@ -393,7 +394,7 @@ export function StoreNotFound() {
             </p>
 
             <Link
-              href="/contact"
+              href={`${base}/contact`}
               className={`inline-block ${styles.buttonClass}`}
               style={
                 template === "bold"
