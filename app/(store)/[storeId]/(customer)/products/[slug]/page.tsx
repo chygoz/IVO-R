@@ -177,7 +177,7 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
             Product not found
           </h1>
           <Link
-            href={`/${storeId}/products`}
+            href={`${base}/products`}
             className="px-6 py-3 rounded-lg font-medium"
             style={{
               backgroundColor: colors.primary,
@@ -201,7 +201,7 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
         <nav className="mb-8">
           <div className="flex items-center space-x-2 text-sm">
             <Link
-              href={`/${storeId}`}
+              href={base || "/"}
               className="hover:opacity-70"
               style={{ color: colors.text }}
             >
@@ -209,7 +209,7 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
             </Link>
             <span>/</span>
             <Link
-              href={`/${storeId}/products`}
+              href={`${base}/products`}
               className="hover:opacity-70"
               style={{ color: colors.text }}
             >

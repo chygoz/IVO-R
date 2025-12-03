@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, lazy, Suspense } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -62,7 +62,8 @@ import {
   Loader2,
 } from "lucide-react";
 
-import { VariantManager } from "./variant-manager";
+// Lazy load the heavy VariantManager component
+const VariantManager = lazy(() => import("./variant-manager").then(module => ({ default: module.VariantManager })));
 import { CategorySelect } from "@/components/ui/category-select";
 import { CollectionSelect } from "@/components/ui/collection-select";
 import { PriceInput } from "@/components/ui/price-input";
@@ -347,7 +348,7 @@ export function ProductForm({
             onFormChange(completeData, Math.round(overallProgress));
           }
         }
-      }, 1000); // Higher delay to reduce update frequency
+      }, 1500); // Increased delay to reduce update frequency and improve performance
     });
 
     // Clean up subscription on unmount
@@ -732,11 +733,20 @@ export function ProductForm({
             </CardHeader>
 
             <CardContent className="p-4 pt-0">
-              <VariantManager
-                onChange={updateVariants}
-                initialVariants={variants}
-                productCode={initialData?.code || "PROD"}
-              />
+              <Suspense
+                fallback={
+                  <div className="flex items-center justify-center py-12">
+                    <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                    <span className="ml-2 text-muted-foreground">Loading variant manager...</span>
+                  </div>
+                }
+              >
+                <VariantManager
+                  onChange={updateVariants}
+                  initialVariants={variants}
+                  productCode={initialData?.code || "PROD"}
+                />
+              </Suspense>
             </CardContent>
           </Card>
         );
