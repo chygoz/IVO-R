@@ -5,6 +5,7 @@ import React, { createContext, useContext, ReactNode } from "react";
 interface StoreContextType {
   store: ResellersResponse;
   isLoading: boolean;
+  storeId: string; // The subdomain/slug used for routing
 }
 
 const StoreContext = createContext<StoreContextType | undefined>(undefined);
@@ -22,6 +23,7 @@ export const ResellerStoreProvider: React.FC<StoreProviderProps> = ({
     () => ({
       store,
       isLoading: false,
+      storeId: store.subdomain || store.storefront?.domain?.subdomain || store.slug || "",
     }),
     [store]
   );

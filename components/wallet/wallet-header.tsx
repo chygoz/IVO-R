@@ -2,15 +2,18 @@
 
 import React from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useParams } from "next/navigation";
 import { Wallet, BarChart3, ReceiptText, ArrowLeftRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTheme } from "@/hooks/use-theme";
 
 const WalletHeader: React.FC = () => {
   const pathname = usePathname();
+  const params = useParams() as { storeId?: string };
+  const storeId = params.storeId;
+  const isPathBased = pathname?.startsWith(`/${storeId}`);
+  const base = isPathBased ? `/${storeId}` : "";
   const { storeTheme } = useTheme();
-  const base = `/${(pathname.split("/")[1] || "").trim()}`;
 
   const links = [
     {

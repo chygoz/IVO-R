@@ -13,7 +13,7 @@ import {
   isProductInStock,
 } from "@/hooks/use-paginated-products";
 import { useDebounce } from "@/hooks/use-debounce";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, usePathname } from "next/navigation";
 
 interface FilterState {
   category: string;
@@ -24,10 +24,11 @@ interface FilterState {
 }
 
 export default function ProductsPage() {
-  const { store } = useStore();
+  const { store, storeId } = useStore();
   const { colors } = store;
-  const pathname = typeof window !== "undefined" ? window.location.pathname : "";
-  const base = `/${(pathname.split("/")[1] || "").trim()}`;
+  const pathname = usePathname();
+  const isPathBased = pathname?.startsWith(`/${storeId}`);
+  const base = isPathBased ? `/${storeId}` : "";
 
   const [filters, setFilters] = useState<FilterState>({
     category: "",

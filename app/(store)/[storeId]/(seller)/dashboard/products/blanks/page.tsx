@@ -2,7 +2,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter, usePathname, useParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -127,7 +127,10 @@ interface ApiResponse {
 export default function BlanksPage() {
   const router = useRouter();
   const pathname = usePathname();
-  const base = `/${(pathname.split("/")[1] || "").trim()}`;
+  const params = useParams() as { storeId?: string };
+  const storeId = params.storeId;
+  const isPathBased = pathname?.startsWith(`/${storeId}`);
+  const base = isPathBased ? `/${storeId}` : "";
   const { toast } = useToast();
 
   const { selectBlank, selectedBlanks, unselectBlank } = useProductStore();

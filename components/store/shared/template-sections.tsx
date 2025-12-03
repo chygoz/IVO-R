@@ -16,11 +16,11 @@ interface HeroSectionProps {
 }
 
 export function HeroSection({ style = "bold" }: HeroSectionProps) {
-  const { store } = useStore();
+  const { store, storeId } = useStore();
   const { colors } = store;
-  const pathname =
-    typeof window !== "undefined" ? window.location.pathname : "";
-  const base = `/${(pathname.split("/")[1] || "").trim()}`;
+  const pathname = usePathname();
+  const isPathBased = pathname?.startsWith(`/${storeId}`);
+  const base = isPathBased ? `/${storeId}` : "";
 
   const headline = store.headline || getDefaultHeadline(style);
   const subtext = store.subtext || getDefaultSubtext(style);
@@ -169,12 +169,12 @@ export function FeaturedProductsSection({
   limit = 4,
   style = "bold",
 }: FeaturedProductsProps) {
-  const { store } = useStore();
+  const { store, storeId } = useStore();
   const { products, loading, error } = useProducts(limit);
   const { colors } = store;
-  const pathname =
-    typeof window !== "undefined" ? window.location.pathname : "";
-  const base = `/${(pathname.split("/")[1] || "").trim()}`;
+  const pathname = usePathname();
+  const isPathBased = pathname?.startsWith(`/${storeId}`);
+  const base = isPathBased ? `/${storeId}` : "";
 
   if (loading) {
     return (
@@ -309,12 +309,12 @@ interface CategoriesSectionProps {
 }
 
 export function CategoriesSection({ style = "bold" }: CategoriesSectionProps) {
-  const { store } = useStore();
+  const { store, storeId } = useStore();
   const { categories, loading, error } = useCategories();
   const { colors } = store;
-  const pathname =
-    typeof window !== "undefined" ? window.location.pathname : "";
-  const base = `/${(pathname.split("/")[1] || "").trim()}`;
+  const pathname = usePathname();
+  const isPathBased = pathname?.startsWith(`/${storeId}`);
+  const base = isPathBased ? `/${storeId}` : "";
 
   if (loading) {
     return (
@@ -549,11 +549,11 @@ interface AboutSectionProps {
 }
 
 export function AboutSection({ style = "bold" }: AboutSectionProps) {
-  const { store } = useStore();
+  const { store, storeId } = useStore();
   const { colors } = store;
-  const pathname =
-    typeof window !== "undefined" ? window.location.pathname : "";
-  const base = `/${(pathname.split("/")[1] || "").trim()}`;
+  const pathname = usePathname();
+  const isPathBased = pathname?.startsWith(`/${storeId}`);
+  const base = isPathBased ? `/${storeId}` : "";
 
   const getContent = () => {
     switch (style) {

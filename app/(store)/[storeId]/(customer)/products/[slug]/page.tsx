@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   Select,
   SelectContent,
@@ -69,14 +70,13 @@ interface ProductDetailPageProps {
 }
 
 export default function ProductDetailPage({ params }: ProductDetailPageProps) {
-  const { store } = useStore();
+  const { store, storeId } = useStore();
   const { colors } = store;
   const { addItem, isLoading: cartLoading } = useCart();
   const { products: relatedProducts } = useProducts(4);
-  
-  // Extract storeId for navigation
-  const pathname = typeof window !== "undefined" ? window.location.pathname : "";
-  const storeId = pathname.split("/")[1] || params.storeId || "";
+  const pathname = usePathname();
+  const isPathBased = pathname?.startsWith(`/${storeId}`);
+  const base = isPathBased ? `/${storeId}` : "";
 
   const [product, setProduct] = useState<ProductDetail | null>(null);
   const [loading, setLoading] = useState(true);
@@ -545,7 +545,7 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
                       className="group"
                     >
                       <Link
-                        href={`/${storeId}/products/${relatedProduct.slug}`}
+                        href={`${base}/products/${relatedProduct.slug}`}
                         className="block"
                       >
                         <div className="aspect-square relative overflow-hidden mb-3">

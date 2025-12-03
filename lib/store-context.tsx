@@ -18,6 +18,7 @@ export interface StoreTheme {
   subtext?: string;
   banner?: string;
   domain?: string;
+  storeId?: string; // The subdomain/slug used for routing
   settings?: {
     currency: string;
     showPrices: boolean;
@@ -27,6 +28,7 @@ export interface StoreTheme {
 
 interface StoreContextType {
   store: StoreTheme;
+  storeId: string;
 }
 
 const StoreContext = createContext<StoreContextType | undefined>(undefined);
@@ -38,7 +40,7 @@ interface StoreProviderProps {
 
 export function StoreProvider({ store, children }: StoreProviderProps) {
   return (
-    <StoreContext.Provider value={{ store }}>{children}</StoreContext.Provider>
+    <StoreContext.Provider value={{ store, storeId: store.storeId || "" }}>{children}</StoreContext.Provider>
   );
 }
 

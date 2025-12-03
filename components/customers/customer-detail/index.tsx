@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname, useParams } from "next/navigation";
 import { getCustomerById, getCustomerTransactions } from "@/actions/customer";
 import { Customer, CustomerTransaction } from "@/types/customer";
 import { Button } from "@/components/ui/button";
@@ -49,6 +49,11 @@ interface CustomerDetailProps {
 
 export function CustomerDetail({ customerId }: CustomerDetailProps) {
   const router = useRouter();
+  const pathname = usePathname();
+  const params = useParams() as { storeId?: string };
+  const storeId = params.storeId;
+  const isPathBased = pathname?.startsWith(`/${storeId}`);
+  const base = isPathBased ? `/${storeId}` : "";
   const [customer, setCustomer] = useState<Customer | null>(null);
   const [transactions, setTransactions] = useState<CustomerTransaction[]>([]);
   const [loading, setLoading] = useState(true);
@@ -127,7 +132,6 @@ export function CustomerDetail({ customerId }: CustomerDetailProps) {
   };
 
   const handleBackToList = () => {
-    const base = `/${(typeof window !== "undefined" ? window.location.pathname.split("/")[1] : "").trim()}`;
     router.push(`${base}/dashboard/management/customers`);
   };
 
@@ -174,7 +178,6 @@ export function CustomerDetail({ customerId }: CustomerDetailProps) {
             variant="link"
             className="p-0 h-auto text-muted-foreground"
             onClick={() => {
-              const base = `/${(typeof window !== "undefined" ? window.location.pathname.split("/")[1] : "").trim()}`;
               router.push(`${base}/dashboard`);
             }}
           >

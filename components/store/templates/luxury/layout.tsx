@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { StoreTheme } from "@/lib/store-context";
 import {
   LogoComponent,
@@ -22,14 +23,14 @@ interface LuxuryLayoutProps {
 export function LuxuryLayout({ children, theme }: LuxuryLayoutProps) {
   const { colors } = theme;
 
-  const pathname =
-    typeof window !== "undefined" ? window.location.pathname : "";
-  const base = `/${(pathname.split("/")[1] || "").trim()}`;
+  const pathname = usePathname();
+  const isPathBased = pathname?.startsWith(`/${theme.storeId}`);
+  const base = isPathBased ? `/${theme.storeId}` : "";
 
   const navigation = [
-    // { label: "Collections", href: "/collections" },
-    { label: "Products", href: "/products" },
-    // { label: "Contact", href: "/contact" },
+    // { label: "Collections", href: `${base}/collections` },
+    { label: "Products", href: `${base}/products` },
+    // { label: "Contact", href: `${base}/contact` },
   ];
 
   return (
