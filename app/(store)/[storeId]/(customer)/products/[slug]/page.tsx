@@ -91,9 +91,16 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
     async function fetchProduct() {
       try {
         setLoading(true);
+        // Get slug from params or extract from pathname as fallback
+        const productSlug = params.slug || pathname.split('/products/')[1]?.split('/')[0] || pathname.split('/').pop();
+        
+        if (!productSlug) {
+          throw new Error("Product slug not found");
+        }
+        
         // Use storeId from context (works for both subdomain and path-based routing)
         const response = await fetch(
-          `/api/stores/${storeId}/products/${params.slug}`
+          `/api/stores/${storeId}/products/${productSlug}`
         );
 
         if (!response.ok) {
